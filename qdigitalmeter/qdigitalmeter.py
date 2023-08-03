@@ -59,6 +59,8 @@ class QDigitalMeter(QWidget):
         self.steps = steps
         self.unit = unit
 
+        self.backgroundColor = None
+        self.borderColor = None
         self.clippingColor = QColor(220, 50, 50)
         self.metersSpacing = 3
         self.minMeterWidth = 10
@@ -204,7 +206,9 @@ class QDigitalMeter(QWidget):
             return
 
         with QPainter(self._innerScalePixmap) as painter:
-            painter.setPen(self.palette().light().color())
+            if self.borderColor:
+                # See comment about colors in paintEvent()
+                painter.setPen(self.borderColor)
             painter.setFont(self.font())
 
             for i, mark in enumerate(self._outerScale):
@@ -218,10 +222,20 @@ class QDigitalMeter(QWidget):
         self.updateMeterPixmap()
 
     def paintEvent(self, event: QPaintEvent):
+        if not self.backgroundColor:
+            # Ideally, we want to use the same colors as any stylesheet in use. Conveniently,
+            # Qt5 populates a widgets' palette with colors derived from the active stylesheet.
+            # Inconveniently, it appears to only do this as part of the paint sequence. Thus,
+            # it is seemingly not possible to access these colors until now.
+            palette = self.palette()
+            self.backgroundColor = palette.window().color()
+            self.borderColor = palette.light().color()
+            self.updateInnerScalePixmap()
+
         painter = QPainter()
         painter.begin(self)
-        painter.setPen(self.palette().light().color())
-        painter.setBrush(self.palette().window().color())
+        painter.setPen(self.borderColor)
+        painter.setBrush(self.backgroundColor)
 
         # Calculate the meter size (per single channel)
         meterRect = QRectF(0, 0, self.metersWidth(), self.metersHeight())
@@ -237,7 +251,7 @@ class QDigitalMeter(QWidget):
             if self.clipping.get(n, False):
                 painter.setPen(self.clippingColor)
             else:
-                painter.setPen(self.palette().light().color())
+                painter.setPen(self.borderColor)
 
             # Draw background and borders
             painter.drawRect(meterRect)
