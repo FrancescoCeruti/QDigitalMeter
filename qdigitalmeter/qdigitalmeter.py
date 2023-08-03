@@ -23,6 +23,7 @@ from PyQt5.QtGui import (
     QLinearGradient,
     QColor,
     QPainter,
+    QPen,
     QPixmap,
     QFontDatabase,
     QFontMetrics, QResizeEvent, QPaintEvent,
@@ -61,6 +62,7 @@ class QDigitalMeter(QWidget):
         self.clippingColor = QColor(220, 50, 50)
         self.metersSpacing = 3
         self.minMeterWidth = 10
+        self.borderWidth = QPen().width()
 
         font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         font.setPointSize(font.pointSize() - 3)
@@ -87,19 +89,17 @@ class QDigitalMeter(QWidget):
         self.update()
 
     def metersHeight(self):
-        # Subtract 1 to address border width
-        return self.height() - 1
+        return self.height() - self.borderWidth
 
     def metersCount(self):
         return len(self.peaks)
 
     def metersWidth(self, forceScale: bool = False):
         metersCount = self.metersCount()
-        totalSpacing = self.metersSpacing * (metersCount - 1)
-        bordersOverflow = self.metersCount()
+        totalSpacing = self.metersSpacing * (metersCount - 1) + self.borderWidth
         outerScaleWidth = self._outerScaleWidth * int(self._canDisplayOuterScale or forceScale)
 
-        return int((self.width() - totalSpacing - bordersOverflow - outerScaleWidth) / metersCount)
+        return int((self.width() - totalSpacing - outerScaleWidth) / metersCount)
 
     def outerScaleWidth(self):
         return (
