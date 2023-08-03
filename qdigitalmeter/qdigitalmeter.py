@@ -58,9 +58,6 @@ class QDigitalMeter(QWidget):
         self.steps = steps
         self.unit = unit
 
-        self.backgroundColor = QColor(32, 32, 32)
-        self.borderColor = QColor(80, 80, 80)
-        self.scaleColor = QColor(90, 90, 90)
         self.clippingColor = QColor(220, 50, 50)
         self.metersSpacing = 3
         self.minMeterWidth = 10
@@ -207,7 +204,7 @@ class QDigitalMeter(QWidget):
             return
 
         with QPainter(self._innerScalePixmap) as painter:
-            painter.setPen(self.scaleColor)
+            painter.setPen(self.palette().light().color())
             painter.setFont(self.font())
 
             for i, mark in enumerate(self._outerScale):
@@ -223,8 +220,8 @@ class QDigitalMeter(QWidget):
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter()
         painter.begin(self)
-        painter.setPen(self.borderColor)
-        painter.setBrush(self.backgroundColor)
+        painter.setPen(self.palette().light().color())
+        painter.setBrush(self.palette().window().color())
 
         # Calculate the meter size (per single channel)
         meterRect = QRectF(0, 0, self.metersWidth(), self.metersHeight())
@@ -240,7 +237,7 @@ class QDigitalMeter(QWidget):
             if self.clipping.get(n, False):
                 painter.setPen(self.clippingColor)
             else:
-                painter.setPen(self.borderColor)
+                painter.setPen(self.palette().light().color())
 
             # Draw background and borders
             painter.drawRect(meterRect)
