@@ -59,9 +59,11 @@ class QDigitalMeter(QWidget):
         self.steps = steps
         self.unit = unit
 
-        self.backgroundColor = None
-        self.borderColor = None
+        palette = self.palette()
+        self.backgroundColor = palette.window().color()
+        self.borderColor = palette.light().color()
         self.clippingColor = QColor(220, 50, 50)
+        self.textColor = palette.windowText().color()
         self.metersSpacing = 3
         self.minMeterWidth = 10
         self.borderWidth = QPen().width()
@@ -206,9 +208,7 @@ class QDigitalMeter(QWidget):
             return
 
         with QPainter(self._innerScalePixmap) as painter:
-            if self.borderColor:
-                # See comment about colors in paintEvent()
-                painter.setPen(self.borderColor)
+            painter.setPen(self.borderColor)
             painter.setFont(self.font())
 
             for i, mark in enumerate(self._outerScale):
@@ -222,16 +222,6 @@ class QDigitalMeter(QWidget):
         self.updateMeterPixmap()
 
     def paintEvent(self, event: QPaintEvent):
-        if not self.backgroundColor:
-            # Ideally, we want to use the same colors as any stylesheet in use. Conveniently,
-            # Qt5 populates a widgets' palette with colors derived from the active stylesheet.
-            # Inconveniently, it appears to only do this as part of the paint sequence. Thus,
-            # it is seemingly not possible to access these colors until now.
-            palette = self.palette()
-            self.backgroundColor = palette.window().color()
-            self.borderColor = palette.light().color()
-            self.updateInnerScalePixmap()
-
         painter = QPainter()
         painter.begin(self)
         painter.setPen(self.borderColor)
@@ -296,7 +286,7 @@ class QDigitalMeter(QWidget):
         textHeight = QFontMetrics(self.font()).height()
         textOffset = textHeight / 2
 
-        painter.setPen(self.palette().windowText().color())
+        painter.setPen(self.textColor)
 
         painter.drawText(QPointF(x, 0), str(self.scale.max))
         for mark in self._outerScale:
