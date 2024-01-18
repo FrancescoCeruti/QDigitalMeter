@@ -1,6 +1,6 @@
 # QDigitalMeter
 
-A simple digital peak meter for PyQt
+A simple digital peak meter for use with PyQt5, PyQt6, PySide2, and PySide6.
 
 ---
 

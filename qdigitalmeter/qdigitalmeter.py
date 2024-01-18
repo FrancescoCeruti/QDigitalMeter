@@ -18,8 +18,8 @@
 from math import ceil
 from typing import Iterable
 
-from PyQt5.QtCore import QPointF, QRectF, Qt, QPoint
-from PyQt5.QtGui import (
+from qtpy.QtCore import QPointF, QRectF, Qt, QPoint
+from qtpy.QtGui import (
     QBrush,
     QColor,
     QFontDatabase,
@@ -31,7 +31,7 @@ from PyQt5.QtGui import (
     QFontDatabase,
     QFontMetrics, QResizeEvent, QPaintEvent,
 )
-from PyQt5.QtWidgets import QWidget
+from qtpy.QtWidgets import QWidget
 
 from qdigitalmeter.scales import Scale, IECScale
 
