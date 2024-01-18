@@ -222,12 +222,12 @@ class QDigitalMeter(QWidget):
         if self._innerScalePixmap.isNull():
             return
 
-        with QPainter(self._innerScalePixmap) as painter:
-            painter.setPen(self.borderPen)
-            painter.setFont(self.font())
+        painter = QPainter(self._innerScalePixmap)
+        painter.setPen(self.borderPen)
+        painter.setFont(self.font())
 
-            for i, mark in enumerate(self._outerScale):
-                painter.drawLine(innerScaleX, mark[0], meterWidth, mark[0])
+        for mark in self._outerScale:
+            painter.drawLine(innerScaleX, mark[0], meterWidth, mark[0])
 
     def resizeEvent(self, event: QResizeEvent):
         self._canDisplayOuterScale = self.metersWidth(True) >= self.minMeterWidth
