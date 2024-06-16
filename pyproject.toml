@@ -7,7 +7,7 @@ name = "qdigitalmeter"
 version = "1.0.0"
 description = ""
 authors = ["Francesco Ceruti <ceppofrancy@gmail.com>"]
-license = "GPLv3"
+license = "LGPL-2.1-or-later"
 readme = "README.md"
 
 [tool.poetry.dependencies]
