@@ -4,11 +4,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "qdigitalmeter"
-version = "1.0.0"
-description = ""
+version = "0.0.1"
+description = "A simple digital peak meter for PyQt"
 authors = ["Francesco Ceruti <ceppofrancy@gmail.com>"]
 license = "LGPL-2.1-or-later"
 readme = "README.md"
+
+repository = "https://github.com/FrancescoCeruti/QDigitalMeter"
 
 [tool.poetry.dependencies]
 python = "^3.8"
