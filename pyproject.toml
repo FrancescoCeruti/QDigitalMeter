@@ -1,0 +1,23 @@
+[build-system]
+requires = ["poetry-core>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "qdigitalmeter"
+version = "1.0.0"
+description = ""
+authors = ["Francesco Ceruti <ceppofrancy@gmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pyqt5 = "^5.15.2"
+pyqt5-qt5 = "5.15.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.3.0"
+
+[tool.black]
+line-length = 120
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
