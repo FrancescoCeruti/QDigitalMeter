@@ -27,4 +27,6 @@ Optionally display decay indicators:
 meter.plot([-42, -42], [-21, -21])
 ```
 
-See `examples/example_01.py` for a working example
+See `examples/example_01.py` for a working example:
+
+![capture](https://github.com/FrancescoCeruti/QDigitalMeter/assets/5596673/e841f7e4-4f63-42bd-81eb-eda2fc86445f)
