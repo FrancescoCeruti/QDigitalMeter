@@ -57,9 +57,8 @@ class IECScale(Scale):
 
 
 class LinearScale(Scale):
-    def __init__(self, min_value: int = -60, max_value: int = 0):
-        self.min = min_value
-        self.max = max_value
+    min: int = -60
+    max: int = 0
 
     def scale(self, value):
         if value < self.min:
