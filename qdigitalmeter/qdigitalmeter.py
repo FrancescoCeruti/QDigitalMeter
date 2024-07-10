@@ -62,11 +62,11 @@ class QDigitalMeter(QWidget):
         self.steps = steps
         self.unit = unit
 
-        palette = self.palette()
-        self.backgroundBrush = QBrush(palette.window().color())
-        self.borderPen = QPen(palette.light().color())
-        self.clippingPen = QPen(QColor(220, 50, 50))
-        self.textPen = QPen(palette.windowText().color())
+        self.backgroundBrush = None
+        self.borderPen = None
+        self.clippingPen = None
+        self.textPen = None
+        self._updateColors()
 
         self.metersSpacing = 3
         self.minMeterWidth = 10
@@ -87,6 +87,18 @@ class QDigitalMeter(QWidget):
         self._outerScaleWidth = self.outerScaleWidth()
         self._canDisplayOuterScale = True
         self._innerScalePixmap = QPixmap()
+
+    def _updateColors(self):
+        palette = self.palette()
+        self.backgroundBrush = QBrush(palette.window().color())
+        self.borderPen = QPen(palette.light().color())
+        self.clippingPen = QPen(QColor(220, 50, 50))
+        self.textPen = QPen(palette.windowText().color())
+
+    def setStyleSheet(self, stylesheet: str):
+        super().setStyleSheet(stylesheet)
+        self.style().polish(self)
+        self._updateColors()
 
     def reset(self):
         self.peaks = [self.scale.min] * len(self.peaks)
