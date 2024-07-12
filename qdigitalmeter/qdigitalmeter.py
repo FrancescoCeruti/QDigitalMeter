@@ -20,9 +20,13 @@ from typing import Iterable
 
 from PyQt5.QtCore import QPointF, QRectF, Qt, QPoint
 from PyQt5.QtGui import (
-    QLinearGradient,
+    QBrush,
     QColor,
+    QFontDatabase,
+    QFontMetrics,
+    QLinearGradient,
     QPainter,
+    QPen,
     QPixmap,
     QFontDatabase,
     QFontMetrics, QResizeEvent, QPaintEvent,
@@ -58,10 +62,12 @@ class QDigitalMeter(QWidget):
         self.steps = steps
         self.unit = unit
 
-        self.backgroundColor = QColor(32, 32, 32)
-        self.borderColor = QColor(80, 80, 80)
-        self.scaleColor = QColor(90, 90, 90)
-        self.clippingColor = QColor(220, 50, 50)
+        self.backgroundBrush = None
+        self.borderPen = None
+        self.clippingPen = None
+        self.textPen = None
+        self._updateColors()
+
         self.metersSpacing = 3
         self.minMeterWidth = 10
 
@@ -82,6 +88,18 @@ class QDigitalMeter(QWidget):
         self._canDisplayOuterScale = True
         self._innerScalePixmap = QPixmap()
 
+    def _updateColors(self):
+        palette = self.palette()
+        self.backgroundBrush = QBrush(palette.window().color())
+        self.borderPen = QPen(palette.light().color())
+        self.clippingPen = QPen(QColor(220, 50, 50))
+        self.textPen = QPen(palette.windowText().color())
+
+    def setStyleSheet(self, stylesheet: str):
+        super().setStyleSheet(stylesheet)
+        self.style().polish(self)
+        self._updateColors()
+
     def reset(self):
         self.peaks = [self.scale.min] * len(self.peaks)
         self.decayPeaks = [self.scale.min] * len(self.decayPeaks)
@@ -90,19 +108,17 @@ class QDigitalMeter(QWidget):
         self.update()
 
     def metersHeight(self):
-        # Subtract 1 to address border width
-        return self.height() - 1
+        return self.height() - self.borderPen.width()
 
     def metersCount(self):
         return len(self.peaks)
 
     def metersWidth(self, forceScale: bool = False):
         metersCount = self.metersCount()
-        totalSpacing = self.metersSpacing * (metersCount - 1)
-        bordersOverflow = self.metersCount()
+        totalSpacing = self.metersSpacing * (metersCount - 1) + self.borderPen.width()
         outerScaleWidth = self._outerScaleWidth * int(self._canDisplayOuterScale or forceScale)
 
-        return int((self.width() - totalSpacing - bordersOverflow - outerScaleWidth) / metersCount)
+        return int((self.width() - totalSpacing - outerScaleWidth) / metersCount)
 
     def outerScaleWidth(self):
         return (
@@ -207,7 +223,7 @@ class QDigitalMeter(QWidget):
             return
 
         with QPainter(self._innerScalePixmap) as painter:
-            painter.setPen(self.scaleColor)
+            painter.setPen(self.borderPen)
             painter.setFont(self.font())
 
             for i, mark in enumerate(self._outerScale):
@@ -223,8 +239,8 @@ class QDigitalMeter(QWidget):
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter()
         painter.begin(self)
-        painter.setPen(self.borderColor)
-        painter.setBrush(self.backgroundColor)
+        painter.setPen(self.borderPen)
+        painter.setBrush(self.backgroundBrush)
 
         # Calculate the meter size (per single channel)
         meterRect = QRectF(0, 0, self.metersWidth(), self.metersHeight())
@@ -238,9 +254,9 @@ class QDigitalMeter(QWidget):
 
             # Decide borders colors, depending on the "clipping" state
             if self.clipping.get(n, False):
-                painter.setPen(self.clippingColor)
+                painter.setPen(self.clippingPen)
             else:
-                painter.setPen(self.borderColor)
+                painter.setPen(self.borderPen)
 
             # Draw background and borders
             painter.drawRect(meterRect)
@@ -285,7 +301,7 @@ class QDigitalMeter(QWidget):
         textHeight = QFontMetrics(self.font()).height()
         textOffset = textHeight / 2
 
-        painter.setPen(self.palette().windowText().color())
+        painter.setPen(self.textPen)
 
         painter.drawText(QPointF(x, 0), str(self.scale.max))
         for mark in self._outerScale:
