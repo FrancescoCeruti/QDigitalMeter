@@ -1,7 +1,7 @@
 from random import uniform
 
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtCore import QTimer
+from qtpy.QtWidgets import QApplication
 
 from qdigitalmeter import QDigitalMeter
 
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     updater = Updater(meter)
     updater.startTimer(33)
 
-    app.exec()
+    # pyside2 requires `app.exec_()`
+    app.exec() if hasattr(app, "exec") else app.exec_()
