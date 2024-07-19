@@ -14,7 +14,7 @@ repository = "https://github.com/FrancescoCeruti/QDigitalMeter"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-qtpy = "^2.0"
+qtpy = "^2.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.3.0"
