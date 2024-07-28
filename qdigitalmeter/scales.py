@@ -16,6 +16,7 @@
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import abstractmethod, ABC
+from dataclasses import dataclass
 
 
 class Scale(ABC):
@@ -56,10 +57,10 @@ class IECScale(Scale):
         return scale / 100
 
 
+@dataclass
 class LinearScale(Scale):
-    def __init__(self, min_value: int = -60, max_value: int = 0):
-        self.min = min_value
-        self.max = max_value
+    min: int = -60
+    max: int = 0
 
     def scale(self, value):
         if value < self.min:
