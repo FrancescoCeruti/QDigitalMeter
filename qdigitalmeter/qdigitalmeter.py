@@ -18,8 +18,8 @@
 from math import ceil
 from typing import Iterable
 
-from PyQt5.QtCore import QPointF, QRectF, Qt, QPoint
-from PyQt5.QtGui import (
+from qtpy.QtCore import QPointF, QRectF, Qt, QPoint
+from qtpy.QtGui import (
     QBrush,
     QColor,
     QFontDatabase,
@@ -31,7 +31,7 @@ from PyQt5.QtGui import (
     QFontDatabase,
     QFontMetrics, QResizeEvent, QPaintEvent,
 )
-from PyQt5.QtWidgets import QWidget
+from qtpy.QtWidgets import QWidget
 
 from qdigitalmeter.scales import Scale, IECScale
 
@@ -222,12 +222,12 @@ class QDigitalMeter(QWidget):
         if self._innerScalePixmap.isNull():
             return
 
-        with QPainter(self._innerScalePixmap) as painter:
-            painter.setPen(self.borderPen)
-            painter.setFont(self.font())
+        painter = QPainter(self._innerScalePixmap)
+        painter.setPen(self.borderPen)
+        painter.setFont(self.font())
 
-            for i, mark in enumerate(self._outerScale):
-                painter.drawLine(innerScaleX, mark[0], meterWidth, mark[0])
+        for mark in self._outerScale:
+            painter.drawLine(innerScaleX, mark[0], meterWidth, mark[0])
 
     def resizeEvent(self, event: QResizeEvent):
         self._canDisplayOuterScale = self.metersWidth(True) >= self.minMeterWidth
