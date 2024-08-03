@@ -14,10 +14,11 @@ repository = "https://github.com/FrancescoCeruti/QDigitalMeter"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-qtpy = "^2.3"
+qtpy = "^2.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.3.0"
+pyqt5 = "^5.15.2"
 
 [tool.black]
 line-length = 120
