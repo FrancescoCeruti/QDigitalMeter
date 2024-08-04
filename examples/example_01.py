@@ -2,6 +2,7 @@ from random import uniform
 
 from qtpy.QtCore import QTimer
 from qtpy.QtWidgets import QApplication
+from qtpy.QtGui import QPalette, QColor
 
 from qdigitalmeter import QDigitalMeter
 
@@ -39,8 +40,13 @@ class Updater(QTimer):
 if __name__ == "__main__":
     app = QApplication([])
 
+    palette = app.palette()
+    palette.setColor(QPalette.Window, QColor(30, 30, 30))
+    palette.setColor(QPalette.WindowText, QColor(230, 230, 230))
+    palette.setColor(QPalette.Light, QColor(80, 80, 80))
+    app.setPalette(palette)
+
     meter = QDigitalMeter()
-    meter.setStyleSheet("* { background: rgb(30, 30, 30); color: rgb(90, 90, 90); }")
     meter.resize(150, 400)
     meter.show()
 
