@@ -22,14 +22,14 @@ from qtpy.QtCore import QPointF, QRectF, Qt, QPoint
 from qtpy.QtGui import (
     QBrush,
     QColor,
-    QFontDatabase,
-    QFontMetrics,
     QLinearGradient,
     QPainter,
     QPen,
     QPixmap,
     QFontDatabase,
-    QFontMetrics, QResizeEvent, QPaintEvent,
+    QFontMetrics,
+    QResizeEvent,
+    QPaintEvent,
 )
 from qtpy.QtWidgets import QWidget
 
